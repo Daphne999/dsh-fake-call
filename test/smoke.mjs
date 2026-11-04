@@ -20,7 +20,7 @@ const kit = createCallKit({
   },
   createUserMessage: (o) => o,
   SessionId: (s) => s,
-  config: { caller: '小鱼', replyTimeoutMs: 2000 },
+  config: { caller: 'DeepSeek', replyTimeoutMs: 2000 },
   log: () => {},
 });
 
@@ -61,7 +61,7 @@ const postReq = (obj = {}) => ({
   const res = fakeRes();
   await kit.handlers['/fake-call']({ method: 'GET', url: '/fake-call', headers: {} }, res);
   const html = String(res.result.body);
-  if (res.result.code !== 200 || !html.includes('接听') || !html.includes('小鱼')) {
+  if (res.result.code !== 200 || !html.includes('接听') || !html.includes('DeepSeek')) {
     console.error('❌ 页面异常');
     process.exit(1);
   }
@@ -71,7 +71,7 @@ const postReq = (obj = {}) => ({
 // 2. 振铃 → state
 {
   const r1 = fakeRes();
-  await kit.handlers['/fake-call/ring'](postReq({ caller: '小鱼' }), r1);
+  await kit.handlers['/fake-call/ring'](postReq({ caller: 'DeepSeek' }), r1);
   if (JSON.parse(r1.result.body).ringing !== true) {
     console.error('❌ 振铃失败');
     process.exit(1);
@@ -79,7 +79,7 @@ const postReq = (obj = {}) => ({
   const r2 = fakeRes();
   await kit.handlers['/fake-call/state']({ method: 'GET', url: '/fake-call/state', headers: {} }, r2);
   const st = JSON.parse(r2.result.body);
-  if (!st.ringing || st.caller !== '小鱼') {
+  if (!st.ringing || st.caller !== 'DeepSeek') {
     console.error('❌ state 不对:', r2.result.body);
     process.exit(1);
   }
@@ -148,7 +148,7 @@ const postReq = (obj = {}) => ({
 {
   const brief = '十点半和设计团队的会，改到两点了。';
   const ring = fakeRes();
-  await kit.handlers['/fake-call/ring'](postReq({ caller: '小鱼', opening: brief }), ring);
+  await kit.handlers['/fake-call/ring'](postReq({ caller: 'DeepSeek', opening: brief }), ring);
   if (JSON.parse(ring.result.body).opening !== brief) {
     console.error('❌ 简报没存进 state');
     process.exit(1);
@@ -170,7 +170,7 @@ const postReq = (obj = {}) => ({
 
 // 9. "没人理就打电话"：布下闹钟 → 用户说话就取消
 {
-  const n = kit.armNudge({ waitSeconds: 1, caller: '小鱼', opening: '在吗' });
+  const n = kit.armNudge({ waitSeconds: 1, caller: 'DeepSeek', opening: '在吗' });
   if (n.waitSeconds !== 1) {
     console.error('❌ nudge 参数不对');
     process.exit(1);
@@ -189,14 +189,14 @@ const postReq = (obj = {}) => ({
   let fired = null;
   const n = kit.armNudge({
     waitSeconds: 300,
-    caller: '小鱼',
+    caller: 'DeepSeek',
     opening: '任务跑完了',
     onFire: (info) => {
       fired = info;
     },
   });
   n.fireNow();
-  if (!kit.state.ringing || kit.state.caller !== '小鱼' || kit.state.pendingOpening !== '任务跑完了') {
+  if (!kit.state.ringing || kit.state.caller !== 'DeepSeek' || kit.state.pendingOpening !== '任务跑完了') {
     console.error('❌ 触发后状态不对');
     process.exit(1);
   }
