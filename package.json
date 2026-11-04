@@ -1,0 +1,51 @@
+{
+  "name": "dsh-fake-call",
+  "version": "0.1.0",
+  "description": "Fake incoming call for DeepSeek Harness: a ringing call page where the assistant answers in a real voice synthesised on your own machine (Windows SAPI, no API key), with call timer, transcript and hang-up. | 伪来电：一页“有人打电话给你”的通话界面，对面是 DSH 里的 AI，声音在本机合成、零 API key。",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "author": "Daphne999",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daphne999/dsh-fake-call.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Daphne999/dsh-fake-call/issues"
+  },
+  "homepage": "https://github.com/Daphne999/dsh-fake-call#readme",
+  "keywords": [
+    "dsh-plugin",
+    "voice",
+    "call",
+    "tts",
+    "offline"
+  ],
+  "os": [
+    "win32"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/schemastery": ">=3.18.1"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/schemastery": {
+      "optional": true
+    }
+  }
+}
