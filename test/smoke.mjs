@@ -144,4 +144,28 @@ const postReq = (obj = {}) => ({
   console.log(`✅ oneLine 截断正常（${t.length} 字）`);
 }
 
+// 8. 带简报的来电：接起来必须原样念简报，不能被模型改写
+{
+  const brief = '十点半和设计团队的会，改到两点了。';
+  const ring = fakeRes();
+  await kit.handlers['/fake-call/ring'](postReq({ caller: '小鱼', opening: brief }), ring);
+  if (JSON.parse(ring.result.body).opening !== brief) {
+    console.error('❌ 简报没存进 state');
+    process.exit(1);
+  }
+  const ans = fakeRes();
+  await kit.handlers['/fake-call/answer'](postReq(), ans);
+  const j = JSON.parse(ans.result.body);
+  if (j.text !== brief) {
+    console.error('❌ 接听没有原样念简报:', j.text);
+    process.exit(1);
+  }
+  // 念完就清空，下一通不会重复念
+  if (kit.state.pendingOpening !== '') {
+    console.error('❌ 简报没被清空');
+    process.exit(1);
+  }
+  console.log('✅ 带简报来电：原样念出且只念一次');
+}
+
 console.log('\n✅ 全部通过');
